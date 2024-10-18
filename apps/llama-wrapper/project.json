@@ -1,0 +1,58 @@
+{
+  "name": "llama-wrapper",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/llama-wrapper/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/llama-wrapper",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/llama-wrapper/src/main.ts",
+        "tsConfig": "apps/llama-wrapper/tsconfig.app.json",
+        "assets": ["apps/llama-wrapper/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "llama-wrapper:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "llama-wrapper:build:development"
+        },
+        "production": {
+          "buildTarget": "llama-wrapper:build:production"
+        }
+      }
+    }
+  }
+}
